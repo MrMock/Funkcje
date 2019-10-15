@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <time.h>
 #include <cmath>
-#include "fun.hpp"
+#include "Fun.hpp"
 #include "Button.hpp"
 
 using namespace std;
