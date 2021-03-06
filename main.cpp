@@ -1,12 +1,17 @@
 #include <SFML/Graphics.hpp>
 #include <time.h>
 #include <cmath>
-#include "Fun.hpp"
+#include "fun.hpp"
 #include "Button.hpp"
+
+#define WindowSizeX 1380
+#define WindowSizeY 768
+
+
 
 using namespace std;
 
-int lgauss(int limit);
+int lGauss(int limit);
 
 int main()
 {
@@ -25,25 +30,25 @@ int main()
     help += to_string(limit);
     help += ")";
 
-    sf::RenderWindow window(sf::VideoMode(1380, 768), "Funkcje");
+    sf::RenderWindow window(sf::VideoMode(WindowSizeX, WindowSizeY), "Funkcje");
 
 
-    Fun fun_1(window, 50, 10);
-    fun_1.line(60);
-    fun_1.scale(100);
-    fun_1.name("sin(t)");
+    Fun sin_function(window, 50, 10);
+    sin_function.line(60);
+    sin_function.scale(100);
+    sin_function.name("sin(t)");
 
-    Fun fun_2(window, 720 , 10);
-    fun_2.line(60);
-    fun_2.scale(3);
-    fun_2.name(help);
+    Fun gauss_function(window, 720 , 10);
+    gauss_function.line(60);
+    gauss_function.scale(3);
+    gauss_function.name(help);
 
-    Button b1(window,260,570, true);
-    Button b2(window,460,570);
-    Button b3(window,920,570, true);
-    Button b4(window,1120,570);
-    Button b5(window,920,650, true);
-    Button b6(window,1120,650);
+    Button button_plus_scale_sin_function(window,260,570, true);
+    Button button_minus_scale_sin_function(window,460,570);
+    Button button_plus_scale_gauss_function(window,920,570, true);
+    Button button_minus_scale_gauss_function(window,1120,570);
+    Button button_plus_value_gauss_function(window,920,650, true);
+    Button button_minus_value_gauss_function(window,1120,650);
 
     while (window.isOpen())
     {
@@ -57,20 +62,20 @@ int main()
 
             if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && event.type != sf::Event::MouseMoved)
             {
-                if(b1.click()) fun_1.scale(fun_1.getscale()-10);
-                if(b2.click())fun_1.scale(fun_1.getscale()+10);
-                if(b3.click())fun_2.scale(fun_2.getscale()-1);
-                if(b4.click())fun_2.scale(fun_2.getscale()+1);
-                if(b5.click()) {
+                if(button_plus_scale_sin_function.click())sin_function.scale(sin_function.getscale()-10);
+                if(button_minus_scale_sin_function.click())sin_function.scale(sin_function.getscale()+10);
+                if(button_plus_scale_gauss_function.click())gauss_function.scale(gauss_function.getscale()-1);
+                if(button_minus_scale_gauss_function.click())gauss_function.scale(gauss_function.getscale()+1);
+                if(button_plus_value_gauss_function.click()) {
                         limit++;
                         help="rozklad gaussa (";
                         help += to_string(limit);
                         help += ",-";
                         help += to_string(limit);
                         help += ")";
-                        fun_2.name(help);
+                        gauss_function.name(help);
                     }
-                if(b6.click()){if(limit>1)
+                if(button_minus_value_gauss_function.click()){if(limit>1)
                             {
                                 limit--;
                                 help="rozklad gaussa (";
@@ -78,7 +83,7 @@ int main()
                                 help += ",-";
                                 help += to_string(limit);
                                 help += ")";
-                                fun_2.name(help);
+                                gauss_function.name(help);
                             }}
             }
 
@@ -93,44 +98,49 @@ int main()
 
         ///sin(t)
         lastsec = x;
-            fun_1.addpoint(sin(x),x);
+            sin_function.addPoint(sin(x),x);
             for(float i =1;i<60; i++)
             {
-                fun_1.addpoint(sin(x+(i/60)),(x+(i/60)));
+                sin_function.addPoint(sin(x+(i/60)),(x+(i/60)));
             }
 
         ///rozklad gaussa
-            act = lgauss(limit);
+            act = lGauss(limit);
             odleglosc = sqrt((act*act)-(2*act*lastpoint)+(lastpoint*lastpoint));
             for(float i =1;i<60; i++)
             {
                 if(lastpoint<act)
-                fun_2.addpoint(lastpoint + odleglosc*(i/60),(x+(i/60)));
+                gauss_function.addPoint(lastpoint + odleglosc*(i/60),(x+(i/60)));
                 if(lastpoint>act)
-                fun_2.addpoint(lastpoint - odleglosc*(i/60),(x+(i/60)));
+                gauss_function.addPoint(lastpoint - odleglosc*(i/60),(x+(i/60)));
                 if(lastpoint==act)
-                fun_2.addpoint(lastpoint,(x+(i/60)));
+                gauss_function.addPoint(lastpoint,(x+(i/60)));
             }
             lastpoint = act;
-            fun_2.addpoint(act,x);
+            gauss_function.addPoint(act,x);
         }
 
         window.clear(sf::Color::White);
-        fun_1.draw();
-        fun_2.draw();
-        b1.draw();
-        b2.draw();
-        b3.draw();
-        b4.draw();
-        b5.draw();
-        b6.draw();
+        
+        sin_function.draw();
+        gauss_function.draw();
+        
+        button_plus_scale_sin_function.draw();
+        button_minus_scale_sin_function.draw();
+        
+        button_plus_scale_gauss_function.draw();
+        button_minus_scale_gauss_function.draw();
+        
+        button_plus_value_gauss_function.draw();
+        button_minus_value_gauss_function.draw();
+        
         window.display();
     }
 
     return 0;
 }
 
-int lgauss(int limit)
+int lGauss(int limit)
 {
     int x,p;
     srand( time( NULL ) );
