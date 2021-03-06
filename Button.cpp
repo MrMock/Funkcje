@@ -1,8 +1,8 @@
 #include "Button.hpp"
 
-Button::Button(sf::RenderWindow &w, int x, int y,bool p)
+Button::Button(sf::RenderWindow &window, int x, int y,bool plus_value)
 {
-    window = &w;
+    this->window = &window;
     button.setSize(sf::Vector2f(50,50));
     button.setPosition(sf::Vector2f(x,y));
     button.setOutlineColor(sf::Color::Black);
@@ -17,7 +17,7 @@ Button::Button(sf::RenderWindow &w, int x, int y,bool p)
 
 
     line[1].setFillColor(sf::Color::Black);
-    if(p)line[0].setFillColor(sf::Color::Black);
+    if(plus_value)line[0].setFillColor(sf::Color::Black);
 
 
 }
@@ -33,10 +33,10 @@ void Button::draw()
 
 bool Button::click()
 {
-    int mx = sf::Mouse::getPosition(*window).x;
-    int my = sf::Mouse::getPosition(*window).y;
-    if(mx >= button.getPosition().x && mx <= button.getPosition().x +button.getSize().x)
-        if(my >= button.getPosition().y && my <= button.getPosition().y +button.getSize().y)
+    int mouse_x = sf::Mouse::getPosition(*window).x;
+    int mouse_y = sf::Mouse::getPosition(*window).y;
+    if(mouse_x >= button.getPosition().x && mouse_x <= button.getPosition().x +button.getSize().x)
+        if(mouse_y >= button.getPosition().y && mouse_y <= button.getPosition().y +button.getSize().y)
             return 1;
     return 0;
 }
