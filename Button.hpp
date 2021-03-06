@@ -8,7 +8,7 @@ using namespace std;
 class Button
 {
 public:
-    Button(sf::RenderWindow &w, int x, int y,bool p = false);
+    Button(sf::RenderWindow &window, int x, int y,bool plus_value = false);
     bool click();
     void draw();
 private:
